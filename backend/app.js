@@ -2,21 +2,21 @@ const express = require("express");
 
 const app = express();
 
-const errorMiddleware = require("./middleware/error")
+const errorMiddleware = require("./middleware/error");
 
 //* Middleware
 
 app.use(express.json());
 
-// . Middleware For Error
+// * Middleware For Error
 
-app.use(errorMiddleware)
-
+app.use(errorMiddleware);
 
 //* Routes
- const product = require("./routes/productRoutes")
+const product = require("./routes/productRoutes");
+const user = require("./routes/userRoutes");
 
+app.use("/api/v1", product);
+app.use("/api/v1", user);
 
- app.use("/api/v1", product);
-
-module.exports = app
+module.exports = app;
