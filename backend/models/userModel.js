@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const validator = require("validator");
 const bcrypt = require("bcryptjs");
+const jwtToken = require("jsonwebtoken")
 
 const userSchema = new mongoose.Schema({
   name: {
@@ -44,6 +45,26 @@ const userSchema = new mongoose.Schema({
   resetPasswordExpire: Date,
 });
 
+//* Hashing Password using BcryptJs
 
+userSchema.pre("save", async function (next) {
+  if (!this.isModified("password")) {
+    next();
+  }
+  this.password = await bcrypt.hash(this.password, 10);
+});
 
-module.exports = mongoose.model("user",userSchema)
+// * Generating JW Token
+userSchema.methods.getJWTToken = function() {
+    return jwtToken.sign({id:this._id},process.env.JWT_SECRET,{
+        expiresIn:process.env.JWT_EXPIRES
+    })
+}
+
+//* Compare Password
+
+userSchema.methods.comparePassword = async function (password) {
+  return await bcrypt.compare(password, this.password);
+};
+
+module.exports = mongoose.model("user", userSchema);
