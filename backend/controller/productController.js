@@ -1,12 +1,17 @@
 const catchAsyncError = require("../middleware/catchAsyncError");
 const Product = require("../models/productModel");
+const ApiFeatures = require("../utils/apifeature");
 const Errorhandler = require("../utils/errorhandler");
 
 //* Get All Product
 exports.getAllProducts = catchAsyncError(async (req, res) => {
 
-  const products = await Product.find()
-  res.status(200).json({ success: true ,products});
+  const resultPerPage = 5;
+  const productCount = await Product.countDocuments()
+
+  const apifeature = new ApiFeatures(Product.find(),req.query).search().filter().pagination(resultPerPage);
+  const products = await apifeature.query;
+  res.status(200).json({ success: true ,products,productCount});
 });
 
 //* Create a Product
