@@ -1,5 +1,11 @@
 const app = require("./app");
 
-app.listen(4500,() => {
-    console.log(`server is live on http://localhost:4500`)
+
+//* Cofig file
+
+const dotenv = require("dotenv");
+dotenv.config({path:"backend/config/config.env"})
+
+app.listen(process.env.PORT,() => {
+    console.log(`server is live on http://localhost:${process.env.PORT}`)
 })
