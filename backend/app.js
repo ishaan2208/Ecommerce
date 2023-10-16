@@ -15,10 +15,13 @@ app.use(cookieParser())
 app.use(errorMiddleware);
 
 //* Routes
-const product = require("./routes/productRoutes");
 const user = require("./routes/userRoutes");
+const product = require("./routes/productRoutes");
+const order = require("./routes/orderRoutes")
 
 app.use("/api/v1", product);
 app.use("/api/v1", user);
+app.use("/api/v1",order);
+
 
 module.exports = app;
